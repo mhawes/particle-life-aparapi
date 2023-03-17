@@ -37,8 +37,7 @@
        surface.addAtoms(Color.CYAN,        count, bigBang);
        surface.addAtoms(Color.LIGHT_GRAY,  count, bigBang);
        surface.addAtoms(Color.MAGENTA,     count, bigBang);
-//       surface.addAtoms(Color.DARK_GRAY,   count, bigBang);
-
+       
        surface.setgFactor(0.1);
        surface.setFriction(0.5);
        surface.setInfluenceLimitRadius(40);
@@ -72,18 +71,6 @@
     }
  
     public BufferedImage paintFrame() {
-//       BufferedImage resultImage = new BufferedImage(CANVAS_WIDTH, CANVAS_HEIGHT, BufferedImage.TYPE_INT_RGB);
-//       Graphics2D g2d = resultImage.createGraphics();
-//       g2d.setBackground(Color.BLACK);
-//
-//       surface.geAtoms().forEach((a) -> {
-//          g2d.setColor(a.getColor());
-//          int x = (int) Math.round(a.getX());
-//          int y = (int) Math.round(a.getY());
-//          g2d.fillOval(x, y, PARTICLE_SIZE, PARTICLE_SIZE);
-//          g2d.drawOval(x, y, PARTICLE_SIZE, PARTICLE_SIZE);
-//       });
-
        BufferedImage resultImage = surface.getFrame();
 
        surface.doCalculations();

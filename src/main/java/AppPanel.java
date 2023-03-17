@@ -1,7 +1,6 @@
 import java.awt.*;
 import javax.swing.*;
  
-/** Test applying affine transform on vector graphics */
 public class AppPanel extends JPanel {
    // Named-constants for dimensions
    public static final int CANVAS_WIDTH = 1900;
@@ -11,8 +10,7 @@ public class AppPanel extends JPanel {
 
    public static final String TITLE = "Particle Life";
    public Surface surface;
- 
-   /** Constructor to set up the GUI components */
+
    public AppPanel() {
       setPreferredSize(new Dimension(CANVAS_WIDTH, CANVAS_HEIGHT));
       surface = new Surface(CANVAS_WIDTH, CANVAS_HEIGHT, INFLUENCE_LIMIT);
@@ -32,8 +30,7 @@ public class AppPanel extends JPanel {
       surface.addAtoms(Color.MAGENTA,     count, bigBang);
       surface.addAtoms(Color.DARK_GRAY,   count, bigBang);
    }
- 
-   /** Custom painting codes on this JPanel */
+
    @Override
    public void paint(Graphics g) {
       super.paintComponent(g);
@@ -50,8 +47,7 @@ public class AppPanel extends JPanel {
          g2d.drawOval(x, y, PARTICLE_SIZE, PARTICLE_SIZE);
       });
    }
- 
-   /** The Entry main method */
+
    public static void main(String[] args) {
       // activate opengl
       System.setProperty("sun.java2d.opengl", "true");
