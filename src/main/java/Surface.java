@@ -5,14 +5,13 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.*;
 import java.util.List;
-import java.util.stream.IntStream;
 
 public class Surface {
   public static final int PARTICLE_SIZE = 2;
 
   private AttractionMatrix attractionMatrix;
   private List<Atom> atoms;
-  private int width, height, influenceLimitRadius;
+  private int width, height, influenceLimitRadius, influenceLimitLevels;
   private double friction = 0.4d;
   private double gFactor = 0.2d;
   private boolean paused;
@@ -25,12 +24,13 @@ public class Surface {
   private double[] atoms_velocity_y;
   private Color[] atoms_colors;
 
-  public Surface(int width, int height, int influenceLimitRadius) {
+  public Surface(int width, int height, int influenceLimitRadius, int influenceLimitLevels) {
     this.attractionMatrix = new AttractionMatrix();
     this.atoms = new ArrayList<>();
     this.width = width;
     this.height = height;
     this.influenceLimitRadius = influenceLimitRadius;
+    this.influenceLimitLevels = influenceLimitLevels;
     this.paused = false;
   }
 
@@ -61,18 +61,19 @@ public class Surface {
 
   public BufferedImage getFrame() {
     BufferedImage resultImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-    Graphics2D g2d = resultImage.createGraphics();
-    g2d.setBackground(Color.BLACK);
+    renderFrame(resultImage.createGraphics());
+    return resultImage;
+  }
 
+  public void renderFrame(Graphics2D g2d) {
+    g2d.setBackground(Color.BLACK);
     for(int i = 0; i < atoms_x.length; ++i) {
       g2d.setColor(atoms_colors[i]);
       int x = (int) Math.round(atoms_x[i]);
       int y = (int) Math.round(atoms_y[i]);
       g2d.fillOval(x, y, PARTICLE_SIZE, PARTICLE_SIZE);
-      g2d.drawOval(x, y, PARTICLE_SIZE, PARTICLE_SIZE);
+//      g2d.drawOval(x, y, PARTICLE_SIZE, PARTICLE_SIZE);
     }
-
-    return resultImage;
   }
 
   public void doCalculations() {
@@ -94,6 +95,7 @@ public class Surface {
     double friction_d = friction;
     double gFactor_d = gFactor;
     double influenceLimitRadius_d = influenceLimitRadius;
+    int influenceLimitLevels_i = influenceLimitLevels;
 
     Kernel kernel = new Kernel(){
       @Override public void run() {
@@ -115,7 +117,7 @@ public class Surface {
             double distance = Math.sqrt(dx * dx + dy * dy);
 
             double gMult = 1d;
-            for (int i = 0; i < 5; ++i) {
+            for (int i = 0; i < influenceLimitLevels_i; ++i) {
               if (distance > i * influenceLimitRadius_d &&
                       distance < (i + 1) * influenceLimitRadius_d) {
                 g *= gMult;
@@ -166,14 +168,6 @@ public class Surface {
     kernel.dispose();
   }
 
-  public List<Atom> geAtoms() {
-    return atoms;
-  }
-
-  public void printDebug() {
-    attractionMatrix.printDebug();
-  }
-
   public void randomiseMatrix() {
     attractionMatrix.randomise();
   }
@@ -192,6 +186,14 @@ public class Surface {
 
   public void setgFactor(double gFactor) {
     this.gFactor = gFactor;
+  }
+
+  public int getWidth() {
+    return width;
+  }
+
+  public int getHeight() {
+    return height;
   }
 }
 

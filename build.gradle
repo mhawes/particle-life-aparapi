@@ -1,6 +1,5 @@
 plugins {
     id 'java'
-    id 'application'
 }
 
 group 'org.example'
@@ -14,12 +13,9 @@ dependencies {
     implementation 'com.aparapi:aparapi:3.0.0'
     implementation 'org.jcodec:jcodec:0.2.5'
     implementation 'org.jcodec:jcodec-javase:0.2.5'
+    implementation 'com.google.guava:guava:31.1-jre'
 }
 
 test {
     useJUnitPlatform()
-}
-
-application {
-    mainClass = 'AppVideo'
 }
